@@ -179,6 +179,7 @@ app.homeButton = Titanium.UI.createButton({
 app.homeButton.addEventListener('click',function(){
   app.detailsWindow.close();
   app.window.open();
+  getStations();
 });
 
 app.compartirImage = Titanium.UI.createImageView({
