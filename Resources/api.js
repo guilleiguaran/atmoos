@@ -20,12 +20,22 @@ function getStations() {
 }
 
 function getStation(id) {
-  url = "http://atmoos.heroku.com/stations/"+id+".json";
   var request = Titanium.Network.createHTTPClient();
   request.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    Ti.API.info(jsonObject);
+    var station = JSON.parse(this.responseText);
   };
   request.open("GET","http://atmoos.heroku.com/stations/"+id+".json");
+  request.send();
+}
+
+function search(latitude, longitude) {
+  var request = Titanium.Network.createHTTPClient();
+  request.onload = function() {
+    station = JSON.parse(this.responseText);
+    Ti.API.info(this.responseText);
+    Ti.API.info(station);
+    app.nearestStation = station;
+  };
+  request.open("GET","http://atmoos.heroku.com/stations/search.json?latitude="+latitude+"&longitude="+longitude);
   request.send();
 }

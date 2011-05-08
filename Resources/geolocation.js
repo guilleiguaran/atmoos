@@ -49,12 +49,15 @@ function findMe() {
 		  latitude = e.coords.latitude;
     }
 
+    search(latitude, longitude);
+
     app.mapView.hide();
     app.mapView.setLocation({latitude:latitude, longitude:longitude, latitudeDelta:0.0075, longitudeDelta:0.0075});
     app.mapView.show();
     try {
       //app.mapView.removeAnnotation('Estas aca');
     } catch(err){
+
     }
     app.locationMarker = Titanium.Map.createAnnotation({
       latitude:latitude,

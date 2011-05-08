@@ -1,5 +1,7 @@
 var app = {};
 
+app.nearestStation = null;
+
 app.window = Titanium.UI.createWindow({
     title:'Atmoos',
     backgroundColor:'#e7eff9'
@@ -53,7 +55,56 @@ app.infoButton = Titanium.UI.createButton({
 });
 app.infoButton.hide();
 
+app.statusImage = Titanium.UI.createImageView({
+  image:'./images/nodisponible.png',
+  backgroundColor: '#e9f0f9',
+	height:75,
+  width:'167',
+	top:80
+});
+
+app.statusLb1 = Titanium.UI.createLabel({
+    text:'En estos momentos no es posible mostrar la información. Esperemos que se resuelva pronto.',
+    height:'auto',
+    width:'auto',
+    top:170,
+    left:5,
+    color:'#393939',
+    font:{fontSize:13}
+});
+
+app.statusLb2 = Titanium.UI.createLabel({
+    text:'',
+    height:'auto',
+    width:'auto',
+    top:240,
+    color:'#393939',
+    font:{fontSize:10}
+});
+
 app.infoButton.addEventListener('click',function(){
+  station = app.nearestStation;
+  if(station.no2 == "Regular" || station.o3 == "Regular" || station.particles == "Regular" || station.so2 == "Regular") {
+    app.statusText = "regular"
+    app.statusImage.image = './images/regular.png'
+    app.statusLb1.text = "El aire de tu zona no está limpio. Es un buen momento para empezar a usar el transporte público. ¿Qué más se te ocurre?";
+    app.statusLb2.text = "Uno o varios de los contaminantes (SO2 NO2 Particulas y O3) se encuentran  entre el 50-100% del valor límite estalecido por las Directivas Europeas.";
+  } else if(station.no2 == "Mala" || station.o3 == "Mala" || station.particles == "Mala" || station.so2 == "Mala") {
+    app.statusText = "mala"
+    app.statusImage.image = './images/malo.png'
+    app.statusLb1.text = "El aire supera los límites de contaminación y puede ser perjudicial para la salud. Informa de ello. ¿Qué crees que podemos hacer?";
+    app.statusLb2.text = "Uno o varios de sus contaminantes (SO2 NO2 Particulas y O3) se encuentran por encima de los límitesestablecidos por las  Directivas Europeas.";
+  } else if(station.no2 == "No Disponible" && station.o3 == "No Disponible" && station.particles == "No Disponible" && station.so2 == "No Disponible") {
+    app.statusText = "desconocida"
+    app.statusImage.image = './images/nodisponible.png'
+    app.statusLb1.text = "En estos momentos no es posible mostrar la información. Esperemos que se resuelva pronto.";
+    app.statusLb2.text = "";
+  } else {
+    app.statusText = "buena"
+    app.statusImage.image = './images/bueno.png'
+    app.statusLb1.text = "Hoy el aire es puro y limpio, así que ¡salgamos a disfrutarlo! El aire nos importa, ayuda a mantenerlo siempre limpio animando a usar transportes como la bici.";
+    app.statusLb2.text = "Todos los componentes analizados del aire (SO2 NO2 Particulas y O3) están por debajo del 50% del valor límite establecido por las Directivas Europeas.";
+  }
   app.window.close();
   app.detailsWindow.open();
 });
@@ -104,7 +155,7 @@ app.aboutButton = Titanium.UI.createButton({
 	height:'61',
 	width:'61',
 	top:405,
-  left:210,
+  left:250,
   borderColor:null,
   borderRadius:0,
   style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
@@ -112,6 +163,52 @@ app.aboutButton = Titanium.UI.createButton({
 
 app.aboutButton.addEventListener('click',function(){
   Ti.Platform.openURL("http://atmoos.heroku.com");
+});
+
+app.homeButton = Titanium.UI.createButton({
+  image:'./images/inicio.png',
+	height:'61',
+	width:'61',
+	top:405,
+  left:20,
+  borderColor:null,
+  borderRadius:0,
+  style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+});
+
+app.homeButton.addEventListener('click',function(){
+  app.detailsWindow.close();
+  app.window.open();
+});
+
+app.compartirImage = Titanium.UI.createImageView({
+  image:'./images/compartir.png',
+	height:20,
+  width:87,
+	top:320,
+  left:5
+});
+
+app.facebookShareButton = Titanium.UI.createButton({
+  image:'./images/facebook.png',
+	height:'55',
+	width:'54',
+	top:300,
+  left:120,
+  borderColor:null,
+  borderRadius:0,
+  style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+});
+
+app.twitterShareButton = Titanium.UI.createButton({
+  image:'./images/twitter.png',
+	height:'55',
+	width:'54',
+	top:300,
+  left:190,
+  borderColor:null,
+  borderRadius:0,
+  style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 });
 
 app.window.add(app.logoImage);
@@ -124,4 +221,12 @@ app.window.add(app.twitterButton);
 app.window.add(app.aboutButton);
 
 app.detailsWindow.add(app.logoImage);
+app.detailsWindow.add(app.statusImage);
+app.detailsWindow.add(app.statusLb1);
+app.detailsWindow.add(app.statusLb2);
 app.detailsWindow.add(app.footerView);
+app.detailsWindow.add(app.homeButton);
+app.detailsWindow.add(app.aboutButton);
+app.detailsWindow.add(app.compartirImage);
+app.detailsWindow.add(app.facebookShareButton);
+app.detailsWindow.add(app.twitterShareButton);
