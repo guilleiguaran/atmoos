@@ -41,8 +41,8 @@ function findMe() {
 		var longitude, latitude;
     if (!e.success || e.error) {
 			alert('Error: ' + translateErrorCode(e.code) + ". Setting a default location");
-      latitude = 28.1291;
-      longitude = -15.4306;
+      latitude = 28.46149;
+      longitude = -16.26592;
 		}
     else {
 		  longitude = e.coords.longitude;
@@ -52,7 +52,10 @@ function findMe() {
     app.mapView.hide();
     app.mapView.setLocation({latitude:latitude, longitude:longitude, latitudeDelta:0.0075, longitudeDelta:0.0075});
     app.mapView.show();
-    app.mapView.removeAnnotation('Estas aca');
+    try {
+      //app.mapView.removeAnnotation('Estas aca');
+    } catch(err){
+    }
     app.locationMarker = Titanium.Map.createAnnotation({
       latitude:latitude,
       longitude:longitude,
@@ -61,6 +64,7 @@ function findMe() {
       animate:true,
     });
     app.mapView.addAnnotation(app.locationMarker);
+    app.infoButton.show();
   });
 }
 
@@ -94,8 +98,8 @@ else {
 		}
 	}
 
-	//Titanium.Geolocation.accuracy = Titanium.Geolocation.ACCURACY_BEST;
-	//Titanium.Geolocation.distanceFilter = 10;
+	Titanium.Geolocation.accuracy = Titanium.Geolocation.ACCURACY_BEST;
+	Titanium.Geolocation.distanceFilter = 10;
 
 	var locationCallback = function(e)
 	{

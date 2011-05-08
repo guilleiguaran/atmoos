@@ -5,6 +5,11 @@ app.window = Titanium.UI.createWindow({
     backgroundColor:'#e7eff9'
 });
 
+app.detailsWindow = Titanium.UI.createWindow({
+    title:'Atmoos',
+    backgroundColor:'#e7eff9'
+});
+
 app.logoImage = Titanium.UI.createImageView({
 	image:'./images/Atmoos.png',
   backgroundColor: '#e9f0f9',
@@ -15,7 +20,7 @@ app.logoImage = Titanium.UI.createImageView({
 
 app.mapView = Titanium.Map.createView({
 	mapType: Titanium.Map.STANDARD_TYPE,
-	region:{latitude:28.1291, longitude:-15.4306, latitudeDelta:0.0075, longitudeDelta:0.0075},
+	region:{latitude:28.46149, longitude:-16.26592, latitudeDelta:0.0075, longitudeDelta:0.0075},
 	animate:true,
 	regionFit:true,
 	userLocation:true,
@@ -23,6 +28,7 @@ app.mapView = Titanium.Map.createView({
   height: 280,
   borderColor:'#34410a'
 });
+getStations();
 
 app.findButton = Titanium.UI.createButton({
   image:'./images/localizame.png',
@@ -44,6 +50,12 @@ app.infoButton = Titanium.UI.createButton({
   borderColor:null,
   borderRadius:0,
   style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+});
+app.infoButton.hide();
+
+app.infoButton.addEventListener('click',function(){
+  app.window.close();
+  app.detailsWindow.open();
 });
 
 app.findButton.addEventListener('click',function(){
@@ -68,6 +80,10 @@ app.facebookButton = Titanium.UI.createButton({
   style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 });
 
+app.facebookButton.addEventListener('click',function(){
+  Ti.Platform.openURL("http://m.facebook.com/pages/atmoos/189155371130569");
+});
+
 app.twitterButton = Titanium.UI.createButton({
   image:'./images/twitter.png',
 	height:'40',
@@ -79,15 +95,23 @@ app.twitterButton = Titanium.UI.createButton({
   style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 });
 
+app.twitterButton.addEventListener('click',function(){
+  Ti.Platform.openURL("http://mobile.twitter.com/atmoos");
+});
+
 app.aboutButton = Titanium.UI.createButton({
   image:'./images/acerca.png',
-	height:'40',
+	height:'61',
 	width:'61',
-	top:415,
+	top:405,
   left:210,
   borderColor:null,
   borderRadius:0,
   style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+});
+
+app.aboutButton.addEventListener('click',function(){
+  Ti.Platform.openURL("http://atmoos.heroku.com");
 });
 
 app.window.add(app.logoImage);
@@ -98,3 +122,6 @@ app.window.add(app.footerView);
 app.window.add(app.facebookButton);
 app.window.add(app.twitterButton);
 app.window.add(app.aboutButton);
+
+app.detailsWindow.add(app.logoImage);
+app.detailsWindow.add(app.footerView);

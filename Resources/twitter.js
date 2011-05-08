@@ -16,6 +16,7 @@ app.twitterButton.addEventListener('click', function(){
           title:'Publicado',
           message:'Se ha compartido la calidad del aire en Twitter.'
         });
+        twitter_response.show();
       }
 		});
   }
