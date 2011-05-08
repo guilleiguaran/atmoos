@@ -38,22 +38,29 @@ function translateErrorCode(code) {
 
 function findMe() {
   Titanium.Geolocation.getCurrentPosition(function(e) {
-		if (!e.success || e.error) {
-			alert('Error: ' + translateErrorCode(e.code));
-			return;
+		var longitude, latitude;
+    if (!e.success || e.error) {
+			alert('Error: ' + translateErrorCode(e.code) + ". Setting a default location");
+      latitude = 28.1291;
+      longitude = -15.4306;
 		}
-		var longitude = e.coords.longitude;
-		var latitude = e.coords.latitude;
-		var altitude = e.coords.altitude;
-		var heading = e.coords.heading;
-		var accuracy = e.coords.accuracy;
-		var speed = e.coords.speed;
-		var timestamp = e.coords.timestamp;
-		var altitudeAccuracy = e.coords.altitudeAccuracy;
+    else {
+		  longitude = e.coords.longitude;
+		  latitude = e.coords.latitude;
+    }
 
-    mapview.hide();
-    mapview.setLocation({latitude:latitude, longitude:longitude, latitudeDelta:0.5, longitudeDelta:0.5});
-    mapview.show();
+    app.mapView.hide();
+    app.mapView.setLocation({latitude:latitude, longitude:longitude, latitudeDelta:0.0075, longitudeDelta:0.0075});
+    app.mapView.show();
+    app.mapView.removeAnnotation('Estas aca');
+    app.locationMarker = Titanium.Map.createAnnotation({
+      latitude:latitude,
+      longitude:longitude,
+      title:'Estas aca',
+      pincolor:Titanium.Map.ANNOTATION_PURPLE,
+      animate:true,
+    });
+    app.mapView.addAnnotation(app.locationMarker);
   });
 }
 
@@ -87,8 +94,8 @@ else {
 		}
 	}
 
-	Titanium.Geolocation.accuracy = Titanium.Geolocation.ACCURACY_BEST;
-	Titanium.Geolocation.distanceFilter = 10;
+	//Titanium.Geolocation.accuracy = Titanium.Geolocation.ACCURACY_BEST;
+	//Titanium.Geolocation.distanceFilter = 10;
 
 	var locationCallback = function(e)
 	{
